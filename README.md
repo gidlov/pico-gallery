@@ -59,3 +59,5 @@ Visit http//example.com/index to see your new gallery.
 ##License##
 
 Gallery is released under [LGPL](http://www.gnu.org/licenses/lgpl-3.0-standalone.html).
+
+![T](http//gidlov.com/github/pico-gallery)
