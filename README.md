@@ -60,4 +60,4 @@ Visit http//example.com/index to see your new gallery.
 
 Gallery is released under [LGPL](http://www.gnu.org/licenses/lgpl-3.0-standalone.html).
 
-![T](http//gidlov.com/github/pico-gallery)
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/1cfa2054cba60fb1326e6c9c1cfb44bd "githalytics.com")](http://githalytics.com/gidlov/pico-gallery)
