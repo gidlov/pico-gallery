@@ -135,18 +135,20 @@ class Gallery {
 		$thumb_path = GALLERY_DIR.$this->gallery[$name]['thumb_path'];
 		if ($this->image) {
 			// Markup for a image
-			$before = (isset($this->gallery[$name]['before_image'])) ? $this->gallery[$name]['before_image'] : "\t\t\t\t".'<div class="thumbnail">'."\n";
-			$after = (isset($this->gallery[$name]['after_image'])) ? $this->gallery[$name]['after_image'] : "\t\t\t\t".'</div>'."\n";
-			
-			$return .= $before;
-			$return .= "\t\t\t\t".'<img src="'.$this->config['base_url'].'/'.$this->image.'" alt="..." class="attachment-medium">'."\n";
-			$return .= $after;
+			$before_image = (isset($this->gallery[$name]['before_image'])) ? $this->gallery[$name]['before_image'] : "\t\t\t\t".'<div class="thumbnail">'."\n";
+			$after_image = (isset($this->gallery[$name]['after_image'])) ? $this->gallery[$name]['after_image'] : "\t\t\t\t".'</div>'."\n";
+			$image_class = (isset($this->gallery[$name]['image_class'])) ? $this->gallery[$name]['image_class'] : "\t\t\t\t".''."\n";
+			$alt_image = (isset($this->gallery[$name]['alt_image'])) ? $this->gallery[$name]['alt_image'] : pathinfo($this->image, PATHINFO_FILENAME);
+
+			$return .= $before_image;
+			$return .= "\t\t\t\t".'<img src="'.$this->config['base_url'].'/'.$this->image.'" alt="'.$alt_image.'" class="'.$image_class.'">'."\n";
+			$return .= $after_image;
 			return $return;
 		} else {
 			// Markup for a gallery.
 			$before_gallery = (isset($this->gallery[$name]['before_gallery'])) ? $this->gallery[$name]['before_gallery'] : "\t\t\t\t".'<div class="row">'."\n";
 			$after_gallery = (isset($this->gallery[$name]['after_gallery'])) ? $this->gallery[$name]['after_gallery'] : "\t\t\t\t".'</div>'."\n";
-			$before_thumbnail = (isset($this->gallery[$name]['before_thumbnail'])) ? $this->gallery[$name]['before_thumbnail'] : "\t\t\t\t\t".'<div class="col-lg-3 col-md-4 col-xs-6 thumb">'."\n";
+			$before_thumbnail = (isset($this->gallery[$name]['before_thumbnail'])) ? $this->gallery[$name]['before_thumbnail'] : "\t\t\t\t\t".'<div class="col-sm-2 col-lg-2 thumb">'."\n";
 			$after_thumbnail = (isset($this->gallery[$name]['after_thumbnail'])) ? $this->gallery[$name]['after_thumbnail'] : "\t\t\t\t\t".'</div>'."\n";
 			$thumbnail_link_class = (isset($this->gallery[$name]['thumbnail_link_class'])) ? $this->gallery[$name]['thumbnail_link_class'] : "thumbnail";
 			$thumbnail_image_class = (isset($this->gallery[$name]['thumbnail_image_class'])) ? $this->gallery[$name]['thumbnail_image_class'] : "img-responsive";
@@ -160,6 +162,7 @@ class Gallery {
 				array_reverse($gallery);
 			}
 			foreach($gallery as $image) {
+				$alt_image = (isset($this->gallery[$name]['alt_image'])) ? $this->gallery[$name]['alt_image'] : pathinfo($image, PATHINFO_FILENAME);
 				if (isset($this->gallery[$name]['exclude']) && in_array(substr($image, strrpos($image, '/')+1), $this->gallery[$name]['exclude'])) {
 					// Skip files in the exclude array.
 					continue;
@@ -167,7 +170,7 @@ class Gallery {
 				$file_name = basename($image);
 				$return .= $before_thumbnail;
 				$return .= "\t\t\t\t\t\t".'<a href="'.$this->config['base_url'].'/'.$this->url.'/'.$name.'/'.$file_name.'" class="'.$thumbnail_link_class.'">'."\n";
-				$return .= "\t\t\t\t\t\t\t".'<img src="'.$this->config['base_url'].'/'.$thumb_path.'/'.GALLERY_PRE_THUMB_NAME.$file_name.'" alt="..." class="'.$thumbnail_image_class.'">'."\n";
+				$return .= "\t\t\t\t\t\t\t".'<img src="'.$this->config['base_url'].'/'.$thumb_path.'/'.GALLERY_PRE_THUMB_NAME.$file_name.'" alt="'.$alt_image.'" class="'.$thumbnail_image_class.'">'."\n";
 				$return .= "\t\t\t\t\t\t".'</a>'."\n";
 				$return .= $after_thumbnail;
 			}

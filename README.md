@@ -15,7 +15,7 @@ Run the `composer update` comand.
 
 Create two folders, one for your pre-scaled large images and one for the thumbnails. For example:
 
-	content/gallery/fullzise
+	content/gallery/fullsize
 	content/gallery/thumbnails
 	...
 	content/index.md
@@ -39,6 +39,10 @@ Add a `gallery` array to your `config` variable and modify according to your nee
 			'after_thumbnail' => '',
 			'thumbnail_link_class' => '',
 			'thumbnail_image_class' => '',
+			'before_image' => '', 
+			'after_image' => '',
+			'image_class' => '',
+			'alt_image' => '',
 			'exclude' => array(),					// Exclude file name(s).
 			'sort_by' => '',	 					// Sort by empty or 'random'.
 			'order_by' => '', 						// Order by ampty or 'reverse'.
