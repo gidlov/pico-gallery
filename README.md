@@ -6,6 +6,9 @@ You may find more info on [gidlov.com/code/gallery](http://gidlov.com/code/galle
 
 You can have as many galleries you want, with customizable markup. You can view all on the same page or different pages, and you can choose where on the page. Not so sophisticated, but it gets the job done.
 
+##Example
+[Running example](http://gidlov.com/gallery)
+
 ###Setup###
 As we make use of the excellent [Image](http://intervention.olivervogel.net/) class we have to update the `require` key of `composer.json` and add the following:
 
