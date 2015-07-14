@@ -51,11 +51,13 @@ Add a `gallery` array to your `config` variable and modify according to your nee
 			'order_by' => '', 						// Order by ampty or 'reverse'.
 	),
 
-Save your `config.php` and enter the URL `http//example.com/index/my_gallery/flush/47b71a856274ac45` to generate the thumbnails.
+Save your `config.php` and enter the URL `http://example.com/index/my_gallery/flush/47b71a856274ac45` to generate the thumbnails.
 
 Add `%my_gallery%` to your `index.md` file, or wherever you want.
 
-Visit http//example.com/index to see your new gallery.
+`gallery/thumbnails`-folder must have write permission.
+
+Visit http://example.com/index to see your new gallery.
 
 ####Done!####
 
