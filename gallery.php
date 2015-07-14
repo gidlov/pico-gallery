@@ -1,4 +1,4 @@
-<?php use Intervention\Image\Image;
+<?php use Intervention\Image\ImageManager;
 
 /**
  * A Gallery plugin for the micro CMS Pico.
@@ -120,8 +120,9 @@ class Gallery {
 			// Generate new thumbnails.
 			$size = isset($this->gallery[$name]['thumb_size']) ? $this->gallery[$name]['thumb_size'] : array(200, 200);
 			$file_name = basename($image);
-			$image = Image::make($image)
-				->grab($size[0], $size[1])
+			$img = new ImageManager();
+			$img->make($image)
+				->fit($size[0], $size[1])
 				->save($thumb_path.DIRECTORY_SEPARATOR.GALLERY_PRE_THUMB_NAME.$file_name, 80);
 		}
 	}
