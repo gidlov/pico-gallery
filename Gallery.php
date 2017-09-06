@@ -80,7 +80,7 @@ final class Gallery extends AbstractPicoPlugin
       if (null !== ($this->__call('getConfig', array('content_dir')))) {
         $this->content_dir = $this->__call('getConfig', array('content_dir'));
       }
-      $this->gallery_config_dir = str_replace($this->root_dir, '', $this->themes_dir);
+      $this->gallery_dir = str_replace($this->root_dir, '', $this->themes_dir);
     }
 
     /**
@@ -99,6 +99,7 @@ final class Gallery extends AbstractPicoPlugin
       $this->requested_url = ($this->requested_url == '') ? 'index' : $this->requested_url;
       $this->requested_gallery = array();
       foreach (array_keys($this->gallery_config) as $gallery_name) {
+				echo $this->gallery_dir.$this->gallery_config[$gallery_name]['image_path'].'/'.$url_part[1];
         if ($this->gallery_config[$gallery_name]['page'] == $this->requested_url) {
           $this->requested_gallery[] = $gallery_name;
         }
@@ -108,9 +109,9 @@ final class Gallery extends AbstractPicoPlugin
           if (isset($url_part[1]) && $url_part[1] == 'flush' && isset($url_part[2]) && $url_part[2] == $this->gallery_config[$gallery_name]['flush']) {
             $this->flush($gallery_name);
             $url = '';
-          } elseif (isset($url_part[1]) && is_file($this->gallery_config_dir.$this->gallery_config[$gallery_name]['image_path'].'/'.$url_part[1])) {
+          } elseif (isset($url_part[1]) && is_file($this->gallery_dir.$this->gallery_config[$gallery_name]['image_path'].'/'.$url_part[1])) {
             $this->current_gallery = $gallery_name;
-            $this->single_image = $this->gallery_config_dir.$this->gallery_config[$gallery_name]['image_path'].'/'.$url_part[1];
+            $this->single_image = $this->gallery_dir.$this->gallery_config[$gallery_name]['image_path'].'/'.$url_part[1];
             unset($url_part[count($url_part)-1]);
             $this->file = $this->content_dir.$this->gallery_config[$gallery_name]['page'].$this->pico_config['content_ext'];
           }
@@ -384,8 +385,8 @@ final class Gallery extends AbstractPicoPlugin
 
     protected function flush($name)
     {
-  		$image_path = $this->gallery_config_dir.$this->gallery_config[$name]['image_path'];
-  		$thumb_path = $this->gallery_config_dir.$this->gallery_config[$name]['thumb_path'];
+  		$image_path = $this->gallery_dir.$this->gallery_config[$name]['image_path'];
+  		$thumb_path = $this->gallery_dir.$this->gallery_config[$name]['thumb_path'];
   		if (!is_dir($image_path)) {
   			return;
   		}
@@ -411,8 +412,8 @@ final class Gallery extends AbstractPicoPlugin
     protected function markup($name)
     {
   		$return = '';
-  		$image_path = $this->gallery_config_dir.$this->gallery_config[$name]['image_path'];
-  		$thumb_path = $this->gallery_config_dir.$this->gallery_config[$name]['thumb_path'];
+  		$image_path = $this->gallery_dir.$this->gallery_config[$name]['image_path'];
+  		$thumb_path = $this->gallery_dir.$this->gallery_config[$name]['thumb_path'];
   		if ($this->single_image) {
   			// Markup for a image
   			$before_image = (isset($this->gallery_config[$name]['before_image'])) ? $this->gallery_config[$name]['before_image'] : "\t\t\t\t".'<div class="thumbnail">'."\n";
