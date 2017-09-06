@@ -59,27 +59,27 @@ A pre-1.2 config example:
 
 	$config['gallery'] = array(
 		'my_gallery' => array(					// Add %my_gallery% some place in your page.
-				'page' => 'index',			// The page you want to view the gallery.
-				'image_path' => 'gallery/fullsize',	// Original Images.
-				'thumb_path' => 'gallery/thumbnails',	// Must be a empty separate folder.
-				'flush' => '47b71a856274ac45',		// A unique string to delete and regenerate thumbnails.
+			'page' => 'index',				// The page you want to view the gallery.
+			'image_path' => 'gallery/fullsize',		// Original Images.
+			'thumb_path' => 'gallery/thumbnails',		// Must be a empty separate folder.
+			'flush' => '47b71a856274ac45',			// A unique string to delete and regenerate thumbnails.
 
-				// These are possible, but not mandatory...
-				'thumb_size' => array(200, 200),
-				'before_gallery' => '',
-				'after_gallery' => '',
-				'before_thumbnail' => '',
-				'after_thumbnail' => '',
-				'thumbnail_link_class' => '',
-				'thumbnail_image_class' => '',
-				'before_image' => '',
-				'after_image' => '',
-				'image_class' => '',
-				'alt_image' => '',
-				'exclude' => array(),			// Exclude file name(s).
-				'sort_by' => '',	 		// Sort by empty or 'random'.
-				'order_by' => '', 			// Order by ampty or 'reverse'.
-			),
+			// These are possible, but not mandatory...
+			'thumb_size' => array(200, 200),
+			'before_gallery' => '',
+			'after_gallery' => '',
+			'before_thumbnail' => '',
+			'after_thumbnail' => '',
+			'thumbnail_link_class' => '',
+			'thumbnail_image_class' => '',
+			'before_image' => '',
+			'after_image' => '',
+			'image_class' => '',
+			'alt_image' => '',
+			'exclude' => array(),				// Exclude file name(s).
+			'sort_by' => '',	 			// Sort by empty or 'random'.
+			'order_by' => '', 				// Order by ampty or 'reverse'.
+		),
 	);
 
 Save your `config.php` and enter the URL `http://example.com/index/my_gallery/flush/47b71a856274ac45` to generate the thumbnails.
