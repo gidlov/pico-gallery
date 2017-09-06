@@ -3,13 +3,15 @@
 use Intervention\Image\ImageManager;
 
 /**
- * A Gallery plugin for the micro Pico CMS.
+ * Pico dummy plugin - a template for plugins
  *
+ * You're a plugin developer? This template may be helpful :-)
+ * Simply remove the events you don't need and add your own logic.
  *
  * @author  Klas Gidlöv
  * @link    http://gidlov.com/en/code/pico-gallery
- * @license http://www.gnu.org/licenses/lgpl-3.0-standalone.html
- * @version 1.2
+ * @license http://opensource.org/licenses/MIT The MIT License
+ * @version 1.2.2
  */
 final class Gallery extends AbstractPicoPlugin
 {
@@ -23,7 +25,6 @@ final class Gallery extends AbstractPicoPlugin
     private $file;
 
     private $root_dir;
-    private $gallery_dir;
     private $content_dir;
     private $config_dir;
     private $themes_dir;
@@ -80,7 +81,6 @@ final class Gallery extends AbstractPicoPlugin
       if (null !== ($this->__call('getConfig', array('content_dir')))) {
         $this->content_dir = $this->__call('getConfig', array('content_dir'));
       }
-      $this->gallery_dir = str_replace($this->root_dir, '', $this->themes_dir);
     }
 
     /**
@@ -99,7 +99,6 @@ final class Gallery extends AbstractPicoPlugin
       $this->requested_url = ($this->requested_url == '') ? 'index' : $this->requested_url;
       $this->requested_gallery = array();
       foreach (array_keys($this->gallery_config) as $gallery_name) {
-				echo $this->gallery_dir.$this->gallery_config[$gallery_name]['image_path'].'/'.$url_part[1];
         if ($this->gallery_config[$gallery_name]['page'] == $this->requested_url) {
           $this->requested_gallery[] = $gallery_name;
         }
@@ -109,9 +108,9 @@ final class Gallery extends AbstractPicoPlugin
           if (isset($url_part[1]) && $url_part[1] == 'flush' && isset($url_part[2]) && $url_part[2] == $this->gallery_config[$gallery_name]['flush']) {
             $this->flush($gallery_name);
             $url = '';
-          } elseif (isset($url_part[1]) && is_file($this->gallery_dir.$this->gallery_config[$gallery_name]['image_path'].'/'.$url_part[1])) {
+          } elseif (isset($url_part[1]) && is_file($this->gallery_config[$gallery_name]['image_path'].'/'.$url_part[1])) {
             $this->current_gallery = $gallery_name;
-            $this->single_image = $this->gallery_dir.$this->gallery_config[$gallery_name]['image_path'].'/'.$url_part[1];
+            $this->single_image = $this->gallery_config[$gallery_name]['image_path'].'/'.$url_part[1];
             unset($url_part[count($url_part)-1]);
             $this->file = $this->content_dir.$this->gallery_config[$gallery_name]['page'].$this->pico_config['content_ext'];
           }
@@ -377,16 +376,10 @@ final class Gallery extends AbstractPicoPlugin
       }
     }
 
-    static protected function getDir(string $name)
-    {
-      return $name;
-      $names = array('root', 'config', 'gallery', 'themes', 'config');
-    }
-
     protected function flush($name)
     {
-  		$image_path = $this->gallery_dir.$this->gallery_config[$name]['image_path'];
-  		$thumb_path = $this->gallery_dir.$this->gallery_config[$name]['thumb_path'];
+  		$image_path = $this->gallery_config[$name]['image_path'];
+  		$thumb_path = $this->gallery_config[$name]['thumb_path'];
   		if (!is_dir($image_path)) {
   			return;
   		}
@@ -409,32 +402,32 @@ final class Gallery extends AbstractPicoPlugin
       header('Location: ' . $this->pico_config['base_url'].$this->gallery_config[$name]['page']);
   	}
 
+    protected function get(string $name, string $config, string $default = '')
+    {
+      if (isset($this->gallery_config[$name][$config])) {
+        return $this->gallery_config[$name][$config];
+      } else {
+        return $default;
+      }
+    }
+
+
+
     protected function markup($name)
     {
   		$return = '';
-  		$image_path = $this->gallery_dir.$this->gallery_config[$name]['image_path'];
-  		$thumb_path = $this->gallery_dir.$this->gallery_config[$name]['thumb_path'];
+  		$image_path = $this->gallery_config[$name]['image_path'];
+  		$thumb_path = $this->gallery_config[$name]['thumb_path'];
   		if ($this->single_image) {
   			// Markup for a image
-  			$before_image = (isset($this->gallery_config[$name]['before_image'])) ? $this->gallery_config[$name]['before_image'] : "\t\t\t\t".'<div class="thumbnail">'."\n";
-  			$after_image = (isset($this->gallery_config[$name]['after_image'])) ? $this->gallery_config[$name]['after_image'] : "\t\t\t\t".'</div>'."\n";
-  			$image_class = (isset($this->gallery_config[$name]['image_class'])) ? $this->gallery_config[$name]['image_class'] : "\t\t\t\t".''."\n";
-  			$alt_image = (isset($this->gallery_config[$name]['alt_image'])) ? $this->gallery_config[$name]['alt_image'] : pathinfo($this->single_image, PATHINFO_FILENAME);
-
-  			$return .= $before_image;
-  			$return .= "\t\t\t\t".'<img src="'.$this->pico_config['base_url'].'/'.$this->single_image.'" alt="'.$alt_image.'" class="'.$image_class.'">'."\n";
-  			$return .= $after_image;
+  			$return .= $this->get($name, 'before_image');
+  			$return .= '<img src="'.$this->pico_config['base_url'].'/'.$this->single_image.'" alt="'.$this->get($name, 'alt_class').'" class="'.$this->get($name, 'image_class').'">'."\n";
+  			$return .= $this->get($name, 'after_image');
+  			//$return .= $after_image;
   			return $return;
   		} else {
   			// Markup for a gallery.
-  			$before_gallery = (isset($this->gallery_config[$name]['before_gallery'])) ? $this->gallery_config[$name]['before_gallery'] : "\t\t\t\t".'<div class="row">'."\n";
-  			$after_gallery = (isset($this->gallery_config[$name]['after_gallery'])) ? $this->gallery_config[$name]['after_gallery'] : "\t\t\t\t".'</div>'."\n";
-  			$before_thumbnail = (isset($this->gallery_config[$name]['before_thumbnail'])) ? $this->gallery_config[$name]['before_thumbnail'] : "\t\t\t\t\t".'<div class="col-sm-2 col-lg-2 thumb">'."\n";
-  			$after_thumbnail = (isset($this->gallery_config[$name]['after_thumbnail'])) ? $this->gallery_config[$name]['after_thumbnail'] : "\t\t\t\t\t".'</div>'."\n";
-  			$thumbnail_link_class = (isset($this->gallery_config[$name]['thumbnail_link_class'])) ? $this->gallery_config[$name]['thumbnail_link_class'] : "thumbnail";
-  			$thumbnail_image_class = (isset($this->gallery_config[$name]['thumbnail_image_class'])) ? $this->gallery_config[$name]['thumbnail_image_class'] : "img-responsive";
-
-  			$return .= $before_gallery;
+  			$return .= $this->get($name, 'before_gallery');
   			$gallery = glob($image_path.'/{*.jpg,*.png,*.gif}', GLOB_BRACE);
   			if (isset($this->gallery_config[$name]['sort_by']) && $this->gallery_config[$name]['sort_by'] == 'random') {
   				shuffle($gallery);
@@ -449,13 +442,12 @@ final class Gallery extends AbstractPicoPlugin
   					continue;
   				}
   				$file_name = basename($image);
-  				$return .= $before_thumbnail;
-  				$return .= "\t\t\t\t\t\t".'<a href="'.$this->pico_config['base_url'].''.$this->requested_url.'/'.$name.'/'.$file_name.'" class="'.$thumbnail_link_class.'">'."\n";
-  				$return .= "\t\t\t\t\t\t\t".'<img src="'.$this->pico_config['base_url'].''.$thumb_path.'/'.'thumb_'.$file_name.'" alt="'.$alt_image.'" class="'.$thumbnail_image_class.'">'."\n";
-  				$return .= "\t\t\t\t\t\t".'</a>'."\n";
-  				$return .= $after_thumbnail;
+  				$return .= $this->get($name, 'before_thumbnail');
+
+  				$return .= '<a href="'.$this->pico_config['base_url'].''.$this->requested_url.'/'.$name.'/'.$file_name.'" class="'.$this->get($name, 'thumbnail_link_class').'"><img src="'.$this->pico_config['base_url'].''.$thumb_path.'/'.'thumb_'.$file_name.'" alt="'.$alt_image.'" class="'.$this->get($name, 'thumbnail_image_class').'"></a>'."\n";
+  				$return .= $this->get($name, 'after_thumbnail');
   			}
-  			$return .= $after_gallery;
+  			$return .= $this->get($name, 'after_gallery');
   			return $return;
   		}
   	}
